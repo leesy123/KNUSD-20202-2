@@ -103,18 +103,12 @@ public class Mycalendar extends JFrame implements ActionListener{
 			int mm = (int)monthCombo.getSelectedItem();
 			
 			if (eventBtn.equals(prevBtn)) { //Previous month
-				if (mm == 1) {
-					yy--;
-					mm = 12;
-				} else
+				if (mm != 1)
 					mm--;
 			}
 			
 			else if (eventBtn.equals(nextBtn)) { //Next month
-				if (mm == 12) {
-					yy++;
-					mm = 1;
-				} else
+				if (mm != 12)
 					mm++;
 			}
 			
@@ -162,7 +156,7 @@ public class Mycalendar extends JFrame implements ActionListener{
 			
 			//올해 2020년의 경우에는 윤음력이 있어, 윤음력인 5/23 ~ 6/20은 공휴일에서 제외
 			if ((month == 5 && i >= 23) || (month == 6 && i <= 20)) {
-				if (outWeek == 1)
+				if (outWeek == 1 || Holiday.LiftHoliday(date))
 					lbl.setForeground(Color.RED);
 				else if (outWeek == 7)
 					lbl.setForeground(Color.BLUE);

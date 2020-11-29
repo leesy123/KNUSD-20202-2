@@ -16,7 +16,7 @@ public class Holiday {
 		arrLunar.add("0814");
 		arrLunar.add("0815");
 		arrLunar.add("0816");
-		arrLunar.add("1231");
+		arrLunar.add("1230");
 		
 		ChineseCalendar chinaCal = new ChineseCalendar();
 		Calendar cal = Calendar.getInstance();
