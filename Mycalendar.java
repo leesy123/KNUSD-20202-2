@@ -146,6 +146,9 @@ public class Mycalendar extends JFrame implements ActionListener {
 		cal.set(year, month-1, 1); //출력할 첫 날의 object
 		int week = cal.get(Calendar.DAY_OF_WEEK); //1일에 대한 요일
 		int lastDate = cal.getActualMaximum(Calendar.DAY_OF_MONTH); //그 달의 마지막 날
+		int y = 0;
+		JLabel lbl1 = new JLabel("");
+		JLabel lbl2 = new JLabel("");
 		
 		for (int i = 1; i < week; i++) //날짜 출력 전까지의 공백 print
 			datePane.add(new JLabel(" "));
@@ -184,7 +187,7 @@ public class Mycalendar extends JFrame implements ActionListener {
 			
 			datePane.add(lbl);
 			
-			Weather[] w_arr = Weather.weather();
+			Weather[] w_arr = Weather.weather();			
 			if (outWeek == 7) {
 				for (int j = 0; j < 7; j++) {
 					int temp_day = i - (6 - j);
@@ -199,6 +202,8 @@ public class Mycalendar extends JFrame implements ActionListener {
 							e.printStackTrace();
 						}
 						
+						JLabel rainLabel, sunnyLabel, lcLabel, mcLabel, cdLabel;
+						
 						for (k = 0; k < 3; k++) {
 							if (w_arr[k].pop != 0) {
 								String rainFileName = "rain.jpg";
@@ -208,8 +213,17 @@ public class Mycalendar extends JFrame implements ActionListener {
 								Image img = rainIcon.getImage();
 								Image changeImg = img.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
 								ImageIcon changeIcon = new ImageIcon(changeImg);
-								JLabel rainLabel = new JLabel(changeIcon);
-								datePane.add(rainLabel);
+								rainLabel = new JLabel(changeIcon);
+								if ((j == 5 && k == 2) || (j == 6 && k == 1) || (j == 6 && k == 2)) {
+									if ((j == 5 && k == 2) || (j == 6 && k == 1))
+										lbl1 = new JLabel(changeIcon);
+									else if (j == 6 && k == 2)
+										lbl2 = new JLabel(changeIcon);
+									y++;
+									continue;
+								}
+								else
+									datePane.add(rainLabel);
 							} else if (w_arr[k].pop == 0 && w_arr[k].sky == 1) {
 								String sunFileName = "Sunny.jpg";
 								String fullpath = currentProjPath + "/" + "src" + "/" + "swproject"
@@ -218,8 +232,17 @@ public class Mycalendar extends JFrame implements ActionListener {
 								Image img = sunnyIcon.getImage();
 								Image changeImg = img.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
 								ImageIcon changeIcon = new ImageIcon(changeImg);
-								JLabel sunnyLabel = new JLabel(changeIcon);
-								datePane.add(sunnyLabel);
+								sunnyLabel = new JLabel(changeIcon);
+								if ((j == 5 && k == 2) || (j == 6 && k == 1) || (j == 6 && k == 2)) {
+									if ((j == 5 && k == 2) || (j == 6 && k == 1))
+										lbl1 = new JLabel(changeIcon);
+									else if (j == 6 && k == 2)
+										lbl2 = new JLabel(changeIcon);
+									y++;
+									continue;
+								}
+								else
+									datePane.add(sunnyLabel);
 							} else if (w_arr[k].pop == 0 && w_arr[k].sky == 2) {
 								String lcFileName = "little cloud.jpg";
 								String fullpath = currentProjPath + "/" + "src" + "/" + "swproject"
@@ -228,8 +251,17 @@ public class Mycalendar extends JFrame implements ActionListener {
 								Image img = lcIcon.getImage();
 								Image changeImg = img.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
 								ImageIcon changeIcon = new ImageIcon(changeImg);
-								JLabel lcLabel = new JLabel(changeIcon);
-								datePane.add(lcLabel);
+								lcLabel = new JLabel(changeIcon);
+								if ((j == 5 && k == 2) || (j == 6 && k == 1) || (j == 6 && k == 2)) {
+									if ((j == 5 && k == 2) || (j == 6 && k == 1))
+										lbl1 = new JLabel(changeIcon);
+									else if (j == 6 && k == 2)
+										lbl2 = new JLabel(changeIcon);
+									y++;
+									continue;
+								}
+								else
+									datePane.add(lcLabel);
 							} else if (w_arr[k].pop == 0 && w_arr[k].sky == 3) {
 								String mcFileName = "many cloud.jpg";
 								String fullpath = currentProjPath + "/" + "src" + "/" + "swproject"
@@ -238,8 +270,17 @@ public class Mycalendar extends JFrame implements ActionListener {
 								Image img = mcIcon.getImage();
 								Image changeImg = img.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
 								ImageIcon changeIcon = new ImageIcon(changeImg);
-								JLabel mcLabel = new JLabel(changeIcon);
-								datePane.add(mcLabel);
+								mcLabel = new JLabel(changeIcon);
+								if ((j == 5 && k == 2) || (j == 6 && k == 1) || (j == 6 && k == 2)) {
+									if ((j == 5 && k == 2) || (j == 6 && k == 1))
+										lbl1 = new JLabel(changeIcon);
+									else if (j == 6 && k == 2)
+										lbl2 = new JLabel(changeIcon);
+									y++;
+									continue;
+								}
+								else
+									datePane.add(mcLabel);
 							} else if (w_arr[k].pop == 0 && w_arr[k].sky == 4) {
 								String cdFileName = "cloudy.png";
 								String fullpath = currentProjPath + "/" + "src" + "/" + "swproject"
@@ -248,8 +289,17 @@ public class Mycalendar extends JFrame implements ActionListener {
 								Image img = cdIcon.getImage();
 								Image changeImg = img.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
 								ImageIcon changeIcon = new ImageIcon(changeImg);
-								JLabel cdLabel = new JLabel(changeIcon);
-								datePane.add(cdLabel);
+								cdLabel = new JLabel(changeIcon);
+								if ((j == 5 && k == 2) || (j == 6 && k == 1) || (j == 6 && k == 2)) {
+									if ((j == 5 && k == 2) || (j == 6 && k == 1))
+										lbl1 = new JLabel(changeIcon);
+									else if (j == 6 && k == 2)
+										lbl2 = new JLabel(changeIcon);
+									y++;
+									continue;
+								}
+								else
+									datePane.add(cdLabel);
 							} else {
 								datePane.add(new JLabel(" "));
 							}
@@ -258,8 +308,21 @@ public class Mycalendar extends JFrame implements ActionListener {
 						j += 2;
 					}
 					
-					else
-						datePane.add(new JLabel(" "));
+					else {
+						if (y == 1 && j == 0) {
+							datePane.add(lbl1);
+							y = 0;
+						}
+						else if (y == 2) {
+							if (j == 0)
+								datePane.add(lbl1);
+							else if (j == 1)
+								datePane.add(lbl2);
+							y = 0;
+						}
+						else
+							datePane.add(new JLabel(" "));
+					}
 				}
 			}
 			
