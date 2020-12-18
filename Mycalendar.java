@@ -3,17 +3,23 @@ package swproject;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.Calendar;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class Mycalendar extends JFrame implements ActionListener{
+import org.json.simple.parser.ParseException;
+
+public class Mycalendar extends JFrame implements ActionListener {
 
 	JPanel topPane = new JPanel();
 	JButton prevBtn = new JButton("<");
@@ -35,7 +41,7 @@ public class Mycalendar extends JFrame implements ActionListener{
 	Calendar now;
 	int year, month, date;
 	
-	public Mycalendar() {
+	public Mycalendar() throws IOException, ParseException {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		now = Calendar.getInstance(); //Today date
 		year = now.get(Calendar.YEAR);
@@ -85,7 +91,7 @@ public class Mycalendar extends JFrame implements ActionListener{
 		
 		add(centerPane, "Center");
 		
-		setSize(400, 300);
+		setSize(400, 500);
 		setVisible(true);
 		
 		prevBtn.addActionListener(this);
@@ -116,22 +122,33 @@ public class Mycalendar extends JFrame implements ActionListener{
 			monthCombo.setSelectedItem(mm);
 		}
 		
-		else if (obj instanceof JComboBox) //ComboBox 이벤트 발생 시
-			createDayStart();
+		else if (obj instanceof JComboBox)
+			try {
+				createDayStart();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (ParseException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 	}
 	
-	public void createDayStart() {
+	public void createDayStart() throws IOException, ParseException {
 		datePane.setVisible(false); //Panel hide
 		datePane.removeAll(); //날짜 출력한 label 지우기
 		dayPrint((int)yearCombo.getSelectedItem(), (int)monthCombo.getSelectedItem());
 		datePane.setVisible(true); //Panel print again
 	}
 	
-	public void dayPrint(int year, int month) {
+	public void dayPrint(int year, int month) throws IOException, ParseException {
 		Calendar cal = Calendar.getInstance();
 		cal.set(year, month-1, 1); //출력할 첫 날의 object
 		int week = cal.get(Calendar.DAY_OF_WEEK); //1일에 대한 요일
 		int lastDate = cal.getActualMaximum(Calendar.DAY_OF_MONTH); //그 달의 마지막 날
+		int y = 0;
+		JLabel lbl1 = new JLabel("");
+		JLabel lbl2 = new JLabel("");
 		
 		for (int i = 1; i < week; i++) //날짜 출력 전까지의 공백 print
 			datePane.add(new JLabel(" "));
@@ -169,10 +186,155 @@ public class Mycalendar extends JFrame implements ActionListener{
 				lbl.setForeground(Color.BLUE);
 			
 			datePane.add(lbl);
+			
+			Weather[] w_arr = Weather.weather();			
+			if (outWeek == 7) {
+				for (int j = 0; j < 7; j++) {
+					int temp_day = i - (6 - j);
+					
+					if ((year == this.year) && (month == this.month) && (temp_day == this.date)) {
+						int k;
+						
+						String currentProjPath = "";
+						try {
+							currentProjPath = new File(".").getCanonicalPath();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						
+						JLabel rainLabel, sunnyLabel, lcLabel, mcLabel, cdLabel;
+						
+						for (k = 0; k < 3; k++) {
+							if (w_arr[k].pop != 0) {
+								String rainFileName = "rain.jpg";
+								String fullpath = currentProjPath + "/" + "src" + "/" + "swproject"
+											+ "/" + rainFileName;
+								ImageIcon rainIcon = new ImageIcon(fullpath);
+								Image img = rainIcon.getImage();
+								Image changeImg = img.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+								ImageIcon changeIcon = new ImageIcon(changeImg);
+								rainLabel = new JLabel(changeIcon);
+								if ((j == 5 && k == 2) || (j == 6 && k == 1) || (j == 6 && k == 2)) {
+									if ((j == 5 && k == 2) || (j == 6 && k == 1))
+										lbl1 = new JLabel(changeIcon);
+									else if (j == 6 && k == 2)
+										lbl2 = new JLabel(changeIcon);
+									y++;
+									continue;
+								}
+								else
+									datePane.add(rainLabel);
+							} else if (w_arr[k].pop == 0 && w_arr[k].sky == 1) {
+								String sunFileName = "Sunny.jpg";
+								String fullpath = currentProjPath + "/" + "src" + "/" + "swproject"
+											+ "/" + sunFileName;
+								ImageIcon sunnyIcon = new ImageIcon(fullpath);
+								Image img = sunnyIcon.getImage();
+								Image changeImg = img.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+								ImageIcon changeIcon = new ImageIcon(changeImg);
+								sunnyLabel = new JLabel(changeIcon);
+								if ((j == 5 && k == 2) || (j == 6 && k == 1) || (j == 6 && k == 2)) {
+									if ((j == 5 && k == 2) || (j == 6 && k == 1))
+										lbl1 = new JLabel(changeIcon);
+									else if (j == 6 && k == 2)
+										lbl2 = new JLabel(changeIcon);
+									y++;
+									continue;
+								}
+								else
+									datePane.add(sunnyLabel);
+							} else if (w_arr[k].pop == 0 && w_arr[k].sky == 2) {
+								String lcFileName = "little cloud.jpg";
+								String fullpath = currentProjPath + "/" + "src" + "/" + "swproject"
+											+ "/" + lcFileName;
+								ImageIcon lcIcon = new ImageIcon(fullpath);
+								Image img = lcIcon.getImage();
+								Image changeImg = img.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+								ImageIcon changeIcon = new ImageIcon(changeImg);
+								lcLabel = new JLabel(changeIcon);
+								if ((j == 5 && k == 2) || (j == 6 && k == 1) || (j == 6 && k == 2)) {
+									if ((j == 5 && k == 2) || (j == 6 && k == 1))
+										lbl1 = new JLabel(changeIcon);
+									else if (j == 6 && k == 2)
+										lbl2 = new JLabel(changeIcon);
+									y++;
+									continue;
+								}
+								else
+									datePane.add(lcLabel);
+							} else if (w_arr[k].pop == 0 && w_arr[k].sky == 3) {
+								String mcFileName = "many cloud.jpg";
+								String fullpath = currentProjPath + "/" + "src" + "/" + "swproject"
+											+ "/" + mcFileName;
+								ImageIcon mcIcon = new ImageIcon(fullpath);
+								Image img = mcIcon.getImage();
+								Image changeImg = img.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+								ImageIcon changeIcon = new ImageIcon(changeImg);
+								mcLabel = new JLabel(changeIcon);
+								if ((j == 5 && k == 2) || (j == 6 && k == 1) || (j == 6 && k == 2)) {
+									if ((j == 5 && k == 2) || (j == 6 && k == 1))
+										lbl1 = new JLabel(changeIcon);
+									else if (j == 6 && k == 2)
+										lbl2 = new JLabel(changeIcon);
+									y++;
+									continue;
+								}
+								else
+									datePane.add(mcLabel);
+							} else if (w_arr[k].pop == 0 && w_arr[k].sky == 4) {
+								String cdFileName = "cloudy.png";
+								String fullpath = currentProjPath + "/" + "src" + "/" + "swproject"
+											+ "/" + cdFileName;
+								ImageIcon cdIcon = new ImageIcon(fullpath);
+								Image img = cdIcon.getImage();
+								Image changeImg = img.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+								ImageIcon changeIcon = new ImageIcon(changeImg);
+								cdLabel = new JLabel(changeIcon);
+								if ((j == 5 && k == 2) || (j == 6 && k == 1) || (j == 6 && k == 2)) {
+									if ((j == 5 && k == 2) || (j == 6 && k == 1))
+										lbl1 = new JLabel(changeIcon);
+									else if (j == 6 && k == 2)
+										lbl2 = new JLabel(changeIcon);
+									y++;
+									continue;
+								}
+								else
+									datePane.add(cdLabel);
+							} else {
+								datePane.add(new JLabel(" "));
+							}
+						}
+						
+						j += 2;
+					}
+					
+					else {
+						if (y == 1 && j == 0)
+							datePane.add(lbl1);
+						else if (y == 2) {
+							if (j == 0)
+								datePane.add(lbl1);
+							else if (j == 1)
+								datePane.add(lbl2);
+						}
+						else
+							datePane.add(new JLabel(" "));
+					}
+				}
+			}
+			
 		}
+		
+		cal.set(year, month-1, lastDate);
+		int ldweek = cal.get(Calendar.DAY_OF_WEEK);
+		for (int i = 0; i < (7 - ldweek); i++)
+			datePane.add(new JLabel(" "));
+		
+		for (int i = 0; i < 7; i++)
+			datePane.add(new JLabel(" "));
 	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException, ParseException {
 		new Mycalendar();
 	}
 	
