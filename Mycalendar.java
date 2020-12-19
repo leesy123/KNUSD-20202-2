@@ -316,9 +316,10 @@ public class Mycalendar extends JFrame implements ActionListener {
 						else if (y == 2) {
 							if (j == 0)
 								datePane.add(lbl1);
-							else if (j == 1)
+							else if (j == 1) {
 								datePane.add(lbl2);
-							y = 0;
+								y = 0;
+							}
 						}
 						else
 							datePane.add(new JLabel(" "));
